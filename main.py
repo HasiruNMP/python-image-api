@@ -4,11 +4,15 @@ from flask import Flask, current_app, flash, request, jsonify, redirect, send_fr
 from werkzeug.utils import secure_filename
 from PIL import Image
 import io
+from flask import Flask
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/images/upload', methods=["POST"])
+@cross_origin()
 def upload():
     if (request.method == "POST"):
         imagef = request.files['image']
@@ -19,6 +23,7 @@ def upload():
 
 
 @app.route('/display/<filename>', methods=["GET"])
+@cross_origin()
 def display_image(filename):
     print('display_image filename: ' + filename)
     return redirect(url_for('static', filename='./images/' + filename), code=301)
